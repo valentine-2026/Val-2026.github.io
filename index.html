@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Will you be my Valentine?</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffe6e6;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden; 
+            touch-action: none; 
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 85%;
+            max-width: 400px;
+        }
+
+        img {
+            width: 150px;
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 15px;
+        }
+
+        h1 {
+            color: #ff3366;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            /* Ensure the container has relative positioning so absolute children (if used) relate to it, 
+               though we use fixed for the runaway button */
+            position: relative; 
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            touch-action: manipulation; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #yesBtn {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+
+        #noBtn {
+            background-color: #f44336;
+            color: white;
+            font-weight: bold;
+            z-index: 1000; /* Ensure it floats above everything while moving */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img id="mainImage" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3Z0eXJ5eG55eG55eG55eG55eG55eG55eG55eG55eG55eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute Cat">
+        
+        <h1 id="question">Will you be my Valentine?</h1>
+        
+        <div class="buttons">
+            <button id="noBtn">No</button>
+            <button id="yesBtn">Yes</button>
+        </div>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const question = document.getElementById('question');
+        const mainImage = document.getElementById('mainImage');
+
+        function moveNoButton(e) {
+            // Prevent default only if it's a touch event to stop scrolling
+            if(e && e.type === 'touchstart') e.preventDefault();
+
+            // 1. Get viewport dimensions
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+
+            // 2. Get button dimensions
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+
+            // 3. Calculate safe boundaries
+            const maxLeft = Math.max(0, windowWidth - btnWidth - 20);
+            const maxTop = Math.max(0, windowHeight - btnHeight - 20);
+
+            // 4. Generate random coordinates
+            const randomLeft = Math.floor(Math.random() * (maxLeft - 10)) + 10;
+            const randomTop = Math.floor(Math.random() * (maxTop - 10)) + 10;
+
+            // 5. Apply new position
+            noBtn.style.position = 'fixed'; 
+            noBtn.style.left = randomLeft + 'px';
+            noBtn.style.top = randomTop + 'px';
+        }
+
+        // Make the "No" button run away
+        noBtn.addEventListener('mouseover', moveNoButton); // Moves when mouse gets close (desktop)
+        noBtn.addEventListener('click', moveNoButton);     // Moves if they manage to click
+        noBtn.addEventListener('touchstart', moveNoButton); // Moves on touch (mobile)
+
+        // Make the "Yes" button the success trigger
+        yesBtn.addEventListener('click', () => {
+            question.innerText = "YAY! I knew it! ❤️";
+            // Optional: Change image to a happy one
+            mainImage.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGZ5eXUxbXgwdW1wYXl5eHk5eHk5eHk5eHk5eHk5eHk5eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/T86i6yDyOYz7J6v9d5/giphy.gif"; 
+            
+            // Hide the No button
+            noBtn.style.display = 'none';
+        });
+    </script>
+
+</body>
+</html>
